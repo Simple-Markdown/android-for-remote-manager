@@ -4,15 +4,62 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#2DFAE060"
     android:orientation="vertical">
 
-    <TextView
+    <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent">
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:background="#79FBD000"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:title="@string/page_title"
+                app:menu="@menu/top_app_bar" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="25dp"
+        android:layout_marginRight="25dp"
+        android:orientation="vertical"
+        android:background="#F9F6F4EB"
+        android:padding="10dp"
+        >
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="选择你的博客"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        android:gravity="center" />
+        >
+        <ImageView
+            android:id="@+id/file_type"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:src="@drawable/folder_48px"/>
+        <TextView
+            android:id="@+id/file_name"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:gravity=""
+            android:text="..."
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_gravity="center" />
+    </LinearLayout>
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+    />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fileList"
         android:layout_width="match_parent"
@@ -20,6 +67,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent" >
+    </androidx.recyclerview.widget.RecyclerView>
+    </LinearLayout>
 </LinearLayout>

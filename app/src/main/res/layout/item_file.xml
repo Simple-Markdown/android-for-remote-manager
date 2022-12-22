@@ -1,15 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:id="@+id/linearLayout_self"
+    android:gravity="left"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+        android:id="@+id/file_type"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:src="@drawable/folder_48px"/>
     <TextView
         android:id="@+id/file_name"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:gravity=""
         android:text="文件名"
         android:textColor="@color/black"
         android:textSize="20sp"
         android:layout_gravity="center" />
+    </LinearLayout>
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 </LinearLayout>

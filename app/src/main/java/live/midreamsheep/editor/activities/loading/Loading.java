@@ -1,4 +1,4 @@
-package live.midreamsheep.editor.activities;
+package live.midreamsheep.editor.activities.loading;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 import java.io.File;
 
 import live.midreamsheep.editor.R;
+import live.midreamsheep.editor.activities.homepage.HomePage;
 import live.midreamsheep.editor.data.AndroidConfig;
 import live.midreamsheep.editor.tool.file.FileController;
 import live.midreamsheep.hexo.netapi.hand.net.ConnectorConfig;
