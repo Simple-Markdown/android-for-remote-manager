@@ -23,6 +23,8 @@ import live.midreamsheep.editor.activities.homepage.HomePage;
 import live.midreamsheep.editor.data.AndroidConfig;
 import live.midreamsheep.editor.tool.file.FileController;
 import live.midreamsheep.hexo.netapi.hand.net.ConnectorConfig;
+import live.midreamsheep.hexo.netapi.message.queue.QueueApi;
+import live.midreamsheep.hexo.netapi.message.queue.Task;
 
 
 public class Loading extends AppCompatActivity {
@@ -57,6 +59,7 @@ public class Loading extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }).start();
+            startTask();
         }
 
         processBar.setProgress(100);
@@ -65,6 +68,30 @@ public class Loading extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    private void startTask() {
+        Thread thread = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                while (!QueueApi.isEmpty()) {
+                    Task task = QueueApi.getTask();
+                    task.getHandler().handle(task.getDatas());
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
+        thread.setDaemon(true);
+        thread.start();
+    }
+
     private void requestPermission() {
         int permission_write= ContextCompat.checkSelfPermission(Loading.this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE);

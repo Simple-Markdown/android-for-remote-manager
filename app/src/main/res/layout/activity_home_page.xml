@@ -18,7 +18,7 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
-                android:background="#79FBD000"
+                android:background="#79F6DA51"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/page_title"

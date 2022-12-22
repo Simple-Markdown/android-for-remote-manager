@@ -15,6 +15,7 @@ import java.util.Map;
 
 import live.midreamsheep.editor.R;
 import live.midreamsheep.editor.activities.setting.SettingsActivity;
+import live.midreamsheep.editor.data.AndroidConfig;
 import live.midreamsheep.editor.tool.file.FileController;
 import live.midreamsheep.editor.tool.handler.HandlerInter;
 import live.midreamsheep.hexo.netapi.hand.HandlerEnum;
@@ -59,27 +60,28 @@ public class MenuMapper {
         map.put(R.id.create_file,(a)->{
             a.runOnUiThread(()->{
                 final EditText inputServer = new EditText(a);
+                //添加取消
+                //添加"Yes"按钮
                 AlertDialog dialog =new AlertDialog.Builder(a)
                         .setTitle("请输入文件名")//标题
                         .setView(inputServer)//内容
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加"Yes"按钮
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                String fileName = inputServer.getText().toString()+".md";
-                                File file = new File(FileController.currentFileDir, fileName);
-                                //创建文件
-                                try {
-                                    FileOutputStream outputStream = new FileOutputStream(file);
-                                    outputStream.close();
-                                }catch (Exception ignored){
-
-                                }
+                        .setPositiveButton("确定", (dialogInterface, i) -> {
+                            String fileName = inputServer.getText().toString()+".md";
+                            File file = new File(FileController.currentFileDir, fileName);
+                            //创建文件
+                            try {
+                                FileOutputStream outputStream = new FileOutputStream(file);
+                                outputStream.close();
+                            }catch (Exception ignored){
                             }
+                            HomePage.files.add(file);
+                            HomePage.fileTreeApadar.notifyDataSetChanged();
+                            if(!AndroidConfig.isConfig){
+                                return;
+                            }
+                            ListenerApi.fileCreate(file,false);
                         })
-                        .setNegativeButton("取消", new DialogInterface.OnClickListener() {//添加取消
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                            }
+                        .setNegativeButton("取消", (dialogInterface, i) -> {
                         })
                         .create();
                 dialog.show();
@@ -87,7 +89,31 @@ public class MenuMapper {
             });
         });
         map.put(R.id.create_folder,(a)->{
+            a.runOnUiThread(()->{
+                final EditText inputServer = new EditText(a);
+                //添加取消
+                //添加"Yes"按钮
+                AlertDialog dialog =new AlertDialog.Builder(a)
+                        .setTitle("请输入文件名")//标题
+                        .setView(inputServer)//内容
+                        .setPositiveButton("确定", (dialogInterface, i) -> {
+                            String fileName = inputServer.getText().toString();
+                            File file = new File(FileController.currentFileDir, fileName);
+                            //创建文件
+                            file.mkdirs();
+                            HomePage.files.add(file);
+                            HomePage.fileTreeApadar.notifyDataSetChanged();
+                            if(!AndroidConfig.isConfig){
+                                return;
+                            }
+                            ListenerApi.directoryCreate(file,false);
+                        })
+                        .setNegativeButton("取消", (dialogInterface, i) -> {
+                        })
+                        .create();
+                dialog.show();
 
+            });
         });
     }
 }

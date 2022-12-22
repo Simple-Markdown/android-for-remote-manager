@@ -1,9 +1,9 @@
 package live.midreamsheep.editor.activities.homepage;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
+import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -25,9 +25,13 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import live.midreamsheep.editor.R;
+import live.midreamsheep.editor.activities.editor.Editor;
+import live.midreamsheep.editor.data.AndroidConfig;
 import live.midreamsheep.editor.tool.file.FileController;
+import live.midreamsheep.hexo.netapi.hand.net.ListenerApi;
 
 public class HomePage extends AppCompatActivity {
 
@@ -35,7 +39,7 @@ public class HomePage extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MaterialToolbar toolbar;
     private LinearLayout parentFile;
-    public static List<File> files = new ArrayList<>();
+    public static CopyOnWriteArrayList<File> files = new CopyOnWriteArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,16 +55,19 @@ public class HomePage extends AppCompatActivity {
             FileController.parentFiles.remove(FileController.parentFiles.size()-1);
             FileController.currentFileDir = file;
             File[] files = file.listFiles();
-            HomePage.this.files = Arrays.asList(files==null||files.length==0 ? new File[0] : files);
+            this.files.clear();
+            this.files.addAll(Arrays.asList(files == null || files.length == 0 ? new File[0] : files));
             fileTreeApadar.notifyDataSetChanged();
         });
+        //长按监听
         setToolBar();
         FileController.currentFileDir = FileController.file;
         if(!FileController.file.exists()){
             FileController.file.mkdirs();
         }
         File[] files = FileController.currentFileDir.listFiles();
-        this.files = Arrays.asList(files == null||files.length==0 ? new File[0] : files);
+        this.files.clear();
+        this.files.addAll(Arrays.asList(files == null || files.length == 0 ? new File[0] : files));
         fileTreeApadar = new FileTreeApadar();
         recyclerView.setAdapter(fileTreeApadar);
         LinearLayoutManager layoutManager = new LinearLayoutManager(HomePage.this);
@@ -92,14 +99,35 @@ public class HomePage extends AppCompatActivity {
 
             String fileName = file.getName();
             holder.fileName.setText(fileName);
-
+            holder.self.setOnLongClickListener(v -> {
+                AlertDialog dialog =new AlertDialog.Builder(holder.self.getContext())
+                        .setTitle("你确定要删除吗")//标题
+                        .setPositiveButton("确定", (dialogInterface, i) -> {
+                            file.delete();
+                            files.remove(file);
+                            fileTreeApadar.notifyDataSetChanged();
+                            if(AndroidConfig.isConfig) {
+                                if (file.isDirectory()) {
+                                    deletefile(file);
+                                    return;
+                                }
+                                ListenerApi.fileDelete(file, false);
+                            }
+                        })//确定按钮
+                        .setNegativeButton("取消", (dialogInterface, i) -> {
+                        })
+                        .create();
+                dialog.show();
+                return true;
+            });
             if (file.isDirectory()) {
                 holder.imageView.setImageDrawable(getDrawable(R.drawable.folder_48px));
                 holder.self.setOnClickListener(v -> {
                     FileController.parentFiles.add(FileController.currentFileDir);
                     FileController.currentFileDir = file;
-                    File[] files = file.listFiles();
-                    HomePage.this.files = Arrays.asList(files==null||files.length==0 ? new File[0] : files);
+                    File[] childFiles = file.listFiles();
+                    files.clear();
+                    files.addAll(Arrays.asList(childFiles == null || childFiles.length == 0 ? new File[0] : childFiles));
                     fileTreeApadar.notifyDataSetChanged();
                 });
                 return;
@@ -107,7 +135,9 @@ public class HomePage extends AppCompatActivity {
             if(file.getAbsoluteFile().toString().endsWith(".md")){
                 holder.imageView.setImageDrawable(getDrawable(R.drawable.file_open_48px));
                 holder.self.setOnClickListener(v -> {
-                    System.out.println("开始编辑");
+                    Intent intent = new Intent(HomePage.this, Editor.class);
+                    FileController.currentFile = file;
+                    startActivity(intent);
                 });
                 return;
             }
@@ -121,6 +151,16 @@ public class HomePage extends AppCompatActivity {
         public int getItemCount() {
             return files.size();
         }
+    }
+
+    private void deletefile(File file) {
+        for (File listFile : file.listFiles()) {
+            if(listFile.isDirectory()){
+                deletefile(file);
+            }
+            listFile.delete();
+        }
+        file.delete();
     }
 
     static class MyViewHoder extends RecyclerView.ViewHolder {
