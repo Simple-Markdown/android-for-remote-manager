@@ -1,7 +1,7 @@
 package live.midreamsheep.editor.tool.handler;
 
-import android.content.Context;
+import androidx.appcompat.app.AppCompatActivity;
 
 public interface HandlerInter {
-    void handle(Context context);
+    void handle(AppCompatActivity context);
 }

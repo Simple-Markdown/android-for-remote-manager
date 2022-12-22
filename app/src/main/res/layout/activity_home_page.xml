@@ -38,6 +38,7 @@
         android:padding="10dp"
         >
     <LinearLayout
+        android:id="@+id/parentFile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >

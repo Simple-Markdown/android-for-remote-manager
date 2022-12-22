@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 
 import live.midreamsheep.editor.R;
 import live.midreamsheep.editor.activities.homepage.HomePage;
@@ -38,16 +39,26 @@ public class Loading extends AppCompatActivity {
         requestPermission();
         processBar.setProgress(25);
         //加载配置文件
-        SharedPreferences config = getSharedPreferences("config", MODE_PRIVATE);
+        SharedPreferences config = getSharedPreferences("live.midreamsheep.editor_preferences", MODE_PRIVATE);
         processBar.setProgress(50);
         processText.setText("正在解析配置文件");
         AndroidConfig.isConfig = config.getBoolean("isConfig", false);
+        String str = config.getString("file", Environment.getExternalStorageDirectory() + "/Documents");
+        FileController.file = new File(str.trim().equals("") ? Environment.getExternalStorageDirectory() + "/Documents" : str);
         if(AndroidConfig.isConfig) {
-            ConnectorConfig.toIp= config.getString("ip", "");
-            ConnectorConfig.toPort = config.getInt("port", 52088);
-            ConnectorConfig.password = config.getString("password", "");
+            ConnectorConfig.toIp= config.getString("ip", "").trim();
+            ConnectorConfig.toPort = Integer.parseInt(config.getString("port", "52088").trim());
+            ConnectorConfig.password = config.getString("password", "").trim();
+            ConnectorConfig.nativeHexoPath = FileController.file.getAbsolutePath();
+            new Thread(()-> {
+                try {
+                    ConnectorConfig.init();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
         }
-        FileController.file = new File(config.getString("file", Environment.getExternalStorageDirectory()+"/Documents"));
+
         processBar.setProgress(100);
         //加载主界面
         Intent intent = new Intent(Loading.this, HomePage.class);

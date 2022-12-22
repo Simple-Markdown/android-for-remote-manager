@@ -31,28 +31,33 @@ import live.midreamsheep.editor.tool.file.FileController;
 
 public class HomePage extends AppCompatActivity {
 
-    private FileTreeApadar fileTreeApadar;
+    public static FileTreeApadar fileTreeApadar;
     private RecyclerView recyclerView;
     private MaterialToolbar toolbar;
-    private List<File> files = new ArrayList<>();
+    private LinearLayout parentFile;
+    public static List<File> files = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
         recyclerView = findViewById(R.id.fileList);
         toolbar = findViewById(R.id.topAppBar);
+        parentFile = findViewById(R.id.parentFile);
+        parentFile.setOnClickListener(v -> {
+            if(FileController.parentFiles.size()==0){
+                return;
+            }
+            File file = FileController.parentFiles.get(FileController.parentFiles.size() - 1);
+            FileController.parentFiles.remove(FileController.parentFiles.size()-1);
+            FileController.currentFileDir = file;
+            File[] files = file.listFiles();
+            HomePage.this.files = Arrays.asList(files==null||files.length==0 ? new File[0] : files);
+            fileTreeApadar.notifyDataSetChanged();
+        });
         setToolBar();
         FileController.currentFileDir = FileController.file;
         if(!FileController.file.exists()){
             FileController.file.mkdirs();
-        }
-        new File(Environment.getExternalStorageDirectory()+"/Documents/"+"asad").mkdirs();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            try {
-                Files.createFile(new File(Environment.getExternalStorageDirectory()+"/Documents/"+"asad.txt").toPath());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
         File[] files = FileController.currentFileDir.listFiles();
         this.files = Arrays.asList(files == null||files.length==0 ? new File[0] : files);
@@ -61,7 +66,6 @@ public class HomePage extends AppCompatActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(HomePage.this);
         recyclerView.setLayoutManager(layoutManager);
     }
-
     @SuppressLint("NonConstantResourceId")
     private void setToolBar() {
         toolbar.setOnMenuItemClickListener(item -> {
@@ -92,8 +96,8 @@ public class HomePage extends AppCompatActivity {
             if (file.isDirectory()) {
                 holder.imageView.setImageDrawable(getDrawable(R.drawable.folder_48px));
                 holder.self.setOnClickListener(v -> {
+                    FileController.parentFiles.add(FileController.currentFileDir);
                     FileController.currentFileDir = file;
-                    FileController.parentFiles.add(file);
                     File[] files = file.listFiles();
                     HomePage.this.files = Arrays.asList(files==null||files.length==0 ? new File[0] : files);
                     fileTreeApadar.notifyDataSetChanged();
