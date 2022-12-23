@@ -17,6 +17,9 @@
     <style name="Theme.Editor.NoActionBar" parent="Theme.Material3.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:fontFamily">@font/mn</item>
+        <!-- 建议再加一句，去除字体自带的padding -->
+        <item name="android:includeFontPadding">false</item>
     </style>
 
     <style name="Theme.Editor.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />

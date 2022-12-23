@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#2DFAE060"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout android:layout_height="wrap_content" android:layout_width="match_parent">
@@ -18,7 +17,7 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
-                android:background="#79F6DA51"
+                android:background="#79A8A79F"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:title="@string/page_title"
@@ -34,7 +33,7 @@
         android:layout_marginLeft="25dp"
         android:layout_marginRight="25dp"
         android:orientation="vertical"
-        android:background="#F9F6F4EB"
+        android:background="#34DFDEDE"
         android:padding="10dp"
         >
     <LinearLayout

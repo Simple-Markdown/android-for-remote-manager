@@ -8,15 +8,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="top"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:fontFamily="@font/mn"
         android:id="@+id/editor">
 
     </androidx.appcompat.widget.AppCompatEditText>
-    <include layout="@layout/tool_bar"
+
+    <include
         android:id="@+id/BottomToolbar"
+        layout="@layout/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fillViewport="true"
-        android:layout_gravity="bottom"/>
+        android:fontFamily="@font/mn"
+        android:layout_gravity="bottom"
+        android:fillViewport="true" />
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/floating_action_button"
         android:layout_width="wrap_content"
