@@ -47,6 +47,7 @@ public class Loading extends AppCompatActivity {
         AndroidConfig.isConfig = config.getBoolean("isConfig", false);
         String str = config.getString("file", Environment.getExternalStorageDirectory() + "/Documents");
         FileController.file = new File(str.trim().equals("") ? Environment.getExternalStorageDirectory() + "/Documents" : str);
+        Toast.makeText(this, str, Toast.LENGTH_SHORT).show();
         if(AndroidConfig.isConfig) {
             ConnectorConfig.toIp= config.getString("ip", "").trim();
             ConnectorConfig.toPort = Integer.parseInt(config.getString("port", "52088").trim());

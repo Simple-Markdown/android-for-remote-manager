@@ -106,11 +106,14 @@ public class HomePage extends AppCompatActivity {
                             file.delete();
                             files.remove(file);
                             fileTreeApadar.notifyDataSetChanged();
-                            if(AndroidConfig.isConfig) {
-                                if (file.isDirectory()) {
-                                    deletefile(file);
-                                    return;
+                            if (file.isDirectory()) {
+                                deletefile(file);
+                                if(AndroidConfig.isConfig) {
+                                    ListenerApi.directoryDelete(file, false);
                                 }
+                                return;
+                            }
+                            if(AndroidConfig.isConfig) {
                                 ListenerApi.fileDelete(file, false);
                             }
                         })//确定按钮
@@ -156,7 +159,7 @@ public class HomePage extends AppCompatActivity {
     private void deletefile(File file) {
         for (File listFile : file.listFiles()) {
             if(listFile.isDirectory()){
-                deletefile(file);
+                deletefile(listFile);
             }
             listFile.delete();
         }

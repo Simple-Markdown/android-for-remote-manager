@@ -57,6 +57,24 @@ public class MenuMapper {
                 });
             }).start();
         });
+        map.put(R.id.server,(a)->{
+            new Thread(()->{
+                HandlerMapper.handlerMap.get(HandlerEnum.SERVER.getId()).handle(new byte[0]);
+                //ui线程发送提示
+                a.runOnUiThread(()->{
+                    Toast.makeText(a,"启动预览成功",Toast.LENGTH_SHORT).show();
+                });
+            }).start();
+        });
+        map.put(R.id.stop_server,(a)->{
+            new Thread(()->{
+                HandlerMapper.handlerMap.get(HandlerEnum.SERVER_STOP.getId()).handle(new byte[0]);
+                //ui线程发送提示
+                a.runOnUiThread(()->{
+                    Toast.makeText(a,"停止预览成功",Toast.LENGTH_SHORT).show();
+                });
+            }).start();
+        });
         map.put(R.id.create_file,(a)->{
             a.runOnUiThread(()->{
                 final EditText inputServer = new EditText(a);
