@@ -61,6 +61,7 @@ public class Editor extends AppCompatActivity implements View.OnClickListener {
             toolbar.findViewById(entry.getKey()).setOnClickListener(this);
         }
         setMenuLinstener();
+
     }
 
     private void setMenuLinstener() {

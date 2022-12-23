@@ -20,6 +20,7 @@
         <item name="android:fontFamily">@font/mn</item>
         <!-- 建议再加一句，去除字体自带的padding -->
         <item name="android:includeFontPadding">false</item>
+        <item name="android:statusBarColor">#FFFBFFF4</item>
     </style>
 
     <style name="Theme.Editor.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
